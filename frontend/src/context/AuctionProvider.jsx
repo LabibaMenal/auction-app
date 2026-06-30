@@ -2,6 +2,7 @@ import { createContext, useContext, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL;
 const AuctionContext = createContext();
 
 export const AuctionProvider = ({ children }) => {
@@ -13,13 +14,13 @@ export const AuctionProvider = ({ children }) => {
 
   const loadAuctionDetails = (id) => {
     if (socketRef.current) socketRef.current.disconnect();
-    socketRef.current = io("http://localhost:5000");
+    socketRef.current = io(API_URL);
 
-    axios.get(`http://localhost:5000/api/auctions/${id}`)
+    axios.get(`${API_URL}/api/auctions/${id}`)
       .then((res) => setSelectedAuction(res.data))
       .catch((err) => console.error(err));
 
-    axios.get(`http://localhost:5000/api/bids/${id}`)
+    axios.get(`${API_URL}/api/bids/${id}`)
       .then((res) => setBids(res.data))
       .catch((err) => console.error(err));
 
@@ -46,27 +47,17 @@ export const AuctionProvider = ({ children }) => {
 
   const placeBid = (amount) => {
     if (!selectedAuction) return;
-    socketRef.current?.emit("place_bid", {
-      auctionId: selectedAuction._id,
-      userId: "test-user-123",
-      amount,
-    });
+    socketRef.current?.emit("place_bid", { auctionId: selectedAuction._id, userId: "test-user-123", amount });
   };
 
   const emitPulse = (isTyping) => {
     if (!selectedAuction) return;
-    if (isTyping) {
-      socketRef.current?.emit("bidding_pulse", { auctionId: selectedAuction._id, user: "test-user-123" });
-    } else {
-      socketRef.current?.emit("bidding_pulse_stop", selectedAuction._id);
-    }
+    if (isTyping) socketRef.current?.emit("bidding_pulse", { auctionId: selectedAuction._id, user: "test-user-123" });
+    else socketRef.current?.emit("bidding_pulse_stop", selectedAuction._id);
   };
 
   return (
-    <AuctionContext.Provider value={{
-      selectedAuction, bids, timeLeft, pulseMessage,
-      loadAuctionDetails, placeBid, emitPulse,
-    }}>
+    <AuctionContext.Provider value={{ selectedAuction, bids, timeLeft, pulseMessage, loadAuctionDetails, placeBid, emitPulse }}>
       {children}
     </AuctionContext.Provider>
   );

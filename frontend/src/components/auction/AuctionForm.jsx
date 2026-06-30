@@ -1,6 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const AuctionForm = ({ onCreated }) => {
   const [form, setForm] = useState({
     title: "", description: "", image: "", startingPrice: "", reservePrice: "", endTime: "",
@@ -16,7 +18,7 @@ const AuctionForm = ({ onCreated }) => {
       return;
     }
     try {
-      const { data: auction } = await axios.post("http://localhost:5000/api/auctions", {
+      const { data: auction } = await axios.post(`${API_URL}/api/auctions`, {
         ...form,
         startingPrice: Number(form.startingPrice),
         reservePrice: form.reservePrice ? Number(form.reservePrice) : undefined,
@@ -24,8 +26,7 @@ const AuctionForm = ({ onCreated }) => {
         endTime: new Date(form.endTime).toISOString(),
       });
 
-      // Auto-start so the auction is live immediately — no second manual request needed
-      await axios.post(`http://localhost:5000/api/auctions/${auction._id}/start`);
+      await axios.post(`${API_URL}/api/auctions/${auction._id}/start`);
 
       setError("");
       onCreated();

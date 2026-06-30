@@ -3,6 +3,8 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import AuctionForm from "../components/auction/AuctionForm";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const statusClass = (status) => {
   if (status === "live") return "badge badge-live";
   if (status === "scheduled") return "badge badge-scheduled";
@@ -14,7 +16,7 @@ const Home = () => {
   const [showForm, setShowForm] = useState(false);
 
   const fetchAuctions = () => {
-    axios.get("http://localhost:5000/api/auctions")
+    axios.get(`${API_URL}/api/auctions`)
       .then((res) => setAuctions(res.data))
       .catch((err) => console.error(err));
   };
