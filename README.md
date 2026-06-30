@@ -1,5 +1,7 @@
 # Live Auction Platform
 
+**[Live Demo](https://auction-app-drab.vercel.app)** · Backend hosted on Render (free tier — first request after inactivity may take 30–50 seconds to wake up)
+
 A real-time bidding app - sellers list items, buyers bid live, and the highest bidder wins automatically when the countdown hits zero. Built on the MERN stack with Socket.io powering live bid broadcasting across all connected clients.
 
 ## Why I built this
@@ -50,6 +52,9 @@ Each auction's countdown runs as a `setInterval` + `setTimeout` pair held in an 
 
 **Live bidding room — timer, current bid, and bid history updating in real time**
 ![Live room](screenshots/live_room.png)
+
+**Real-time sync across two tabs — same auction, live updating**
+![Live sync across tabs](screenshots/live_sync.png)
 
 **Server-side validation — a bid below the current price is rejected before it reaches the database**
 ![Bid rejected](screenshots/bid_below.png)
