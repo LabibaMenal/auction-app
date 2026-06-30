@@ -11,14 +11,20 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+
+const allowedOrigins = [
+  "https://auction-app-drab.vercel.app",
+  "http://localhost:5173",
+];
+
+app.use(cors({ origin: allowedOrigins }));
 
 app.use("/api/auctions", require("./routes/auctionRoutes"));
 app.use("/api/bids", require("./routes/bidRoutes"));
 
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
-  cors: { origin: "*" }
+  cors: { origin: allowedOrigins }
 });
 
 init(io); // give timerManager access to io
