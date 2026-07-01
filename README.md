@@ -1,6 +1,6 @@
 # Live Auction Platform
 
-**[Live Demo](https://auction-app-drab.vercel.app)** · Backend hosted on Render (free tier - first request after inactivity may take 30–50 seconds to wake up, not a crash)
+**[Live Demo](https://auction-app-drab.vercel.app)** · Backend hosted on Render (free tier - first request after inactivity may take 30-50 seconds to wake up, not a crash)
 
 A **real-time bidding app** - sellers list items, buyers bid live, and the highest bidder wins automatically when the countdown hits zero. Built on the MERN stack with Socket.io powering live bid broadcasting across all connected clients.
 
