@@ -6,7 +6,17 @@ A **real-time bidding app** - sellers list items, buyers bid live, and the highe
 
 ## Why I built this
 
-I started from a MERN chat app I'd already tried to understand and read and noticed that a Socket.io chat room and a live auction room solve the same underlying problem: a group of clients in a shared channel reacting to state changes in real time. I repurposed the room-join pattern and message model into bids, then replaced "message ordering" with the actually hard part: a server-authoritative countdown that has to survive a server restart without losing track of time. I used the endTime timestamo approach to solve and build a server-side clock that can't be wrong even if the server crashes.
+I started from a MERN chat app I'd already tried to understand and read and noticed that a Socket.io chat room and a live auction room solve the same underlying problem: a group of clients in a shared channel reacting to state changes in real time. I repurposed the room-join pattern and message model into bids, then replaced "message ordering" with the actually hard part: a server-authoritative countdown that has to survive a server restart without losing track of time. The solution was storing an absolute `endTime` timestamp in MongoDB instead of an in-memory counter- so the remaining time is always just `endTime - Date.now()`, correct irrespective of how long the server was down.
+
+## What exactly is this Project?
+
+A real-time live auction platform. Sellers list an item with a starting price and an end time.
+Buyers join an auction room and bid live - every bid is validated on the server, broadcast
+instantly to everyone watching that auction via Socket.io, and the highest bidder wins
+automatically the moment a server-side countdown hits zero. Originally built by converting an
+existing MERN chat app: a Socket.io chat room and a live auction room are structurally the same
+problem (a group of clients in a shared channel reacting to real-time state changes), so the
+room-join pattern and message model were repurposed into auctions and bids.
 
 ## Features
 
